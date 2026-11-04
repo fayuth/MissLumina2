@@ -1,0 +1,257 @@
+@startuml MissLumina_Clases
+!pragma layout smetana
+skinparam backgroundColor #FDF9FA
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #D46A8C
+skinparam classArrowColor #7B6B72
+skinparam classFontColor #2D2026
+skinparam classFontName "Segoe UI"
+skinparam classFontSize 12
+skinparam packageBackgroundColor #FBE8EF
+skinparam packageBorderColor #E8C7D3
+skinparam shadowing false
+skinparam roundCorner 12
+hide circle
+hide empty members
+
+title Diagrama de clases - Miss Lumina
+
+package "com.misslumina.model" {
+
+  class Usuario {
+    - id : Long
+    - nombre : String
+    - correo : String
+    - contrasena : String
+    - rol : String
+    - telefono : String
+    - fechaRegistro : LocalDate
+    + Usuario()
+    + Usuario(nombre, correo, contrasena, telefono)
+    + esAdministrador() : boolean
+    + esCliente() : boolean
+    + marcarComoAdministrador() : void
+    + getNombreCorto() : String
+    + getFechaRegistroFormateada() : String
+    + toString() : String
+  }
+
+  class Producto {
+    - id : Long
+    - nombre : String
+    - descripcion : String
+    - precio : double
+    - precioAnterior : double
+    - stock : int
+    - marca : String
+    - categoria : String
+    - tono : String
+    - disponible : boolean
+    + {static} STOCK_MINIMO : int = 5
+    + Producto()
+    + Producto(nombre, descripcion, precio, precioAnterior, stock, marca, categoria, tono)
+    + calcularSubtotal(cantidad) : double
+    + calcularDescuentoUnitario() : double
+    + calcularPorcentajeDescuento() : double
+    + calcularValorInventario() : double
+    + hayStock(cantidad) : boolean
+    + esStockBajo() : boolean
+    + descontarStock(cantidad) : void
+    + reponerStock(cantidad) : void
+    + actualizarDisponibilidad() : void
+    + toString() : String
+  }
+
+  class Pedido {
+    - id : Long
+    - idTransaccion : UUID
+    - fechaPedido : LocalDate
+    - fechaHoraPedido : LocalDateTime
+    - estado : String
+    - total : double
+    - metodoPago : String
+    - usuario : Usuario
+    - detalles : List<DetallePedido>
+    + {static} IVA : double = 0.19
+    + {static} generarIdTransaccion() : UUID
+    + Pedido()
+    + Pedido(usuario, metodoPago)
+    + generarTransaccion() : void
+    + registrarPedido() : void
+    + agregarDetalle(producto, cantidad) : void
+    + calcularSubtotal() : double
+    + calcularDescuentoTotal() : double
+    + calcularIva() : double
+    + calcularTotal() : double
+    + recalcularTotal() : void
+    + calcularUnidadesVendidas() : int
+    + puedeCambiarA(nuevoEstado) : boolean
+    + cambiarEstado(nuevoEstado) : void
+    + getNumeroOrden() : String
+    + getUuidCorto() : String
+    + toString() : String
+  }
+
+  class DetallePedido {
+    - id : Long
+    - producto : Producto
+    - cantidad : int
+    - precioUnitario : double
+    - subtotal : double
+    - pedido : Pedido
+    + DetallePedido()
+    + DetallePedido(producto, cantidad)
+    + calcularSubtotal(cantidad, precio) : double
+    + recalcularSubtotal() : void
+    + getProductoNombre() : String
+    + getSubtotalFormateado() : String
+    + toString() : String
+  }
+
+  class Categoria {
+    - id : Long
+    - nombre : String
+    - descripcion : String
+    - activa : boolean
+    + Categoria()
+    + Categoria(nombre, descripcion)
+    + toString() : String
+  }
+
+  class Marca {
+    - id : Long
+    - nombre : String
+    - paisOrigen : String
+    - activa : boolean
+    + Marca()
+    + Marca(nombre, paisOrigen)
+    + toString() : String
+  }
+
+  class Tono {
+    - id : Long
+    - nombre : String
+    - codigoHex : String
+    - activo : boolean
+    + Tono()
+    + Tono(nombre, codigoHex)
+    + toString() : String
+  }
+
+  class Carrito {
+    - items : List<ItemCarrito>
+    + {static} MAX_UNIDADES_POR_PRODUCTO : int = 20
+    + agregarProducto(producto, cantidad) : void
+    + actualizarCantidad(productoId, cantidad) : void
+    + eliminarProducto(productoId) : void
+    + vaciar() : void
+    + calcularSubtotal() : double
+    + calcularIva() : double
+    + calcularTotal() : double
+    + calcularAhorro() : double
+    + getCantidadTotal() : int
+    + estaVacio() : boolean
+  }
+
+  class ItemCarrito {
+    - producto : Producto
+    - cantidad : int
+    + ItemCarrito()
+    + ItemCarrito(producto, cantidad)
+    + calcularSubtotal() : double
+    + getSubtotalFormateado() : String
+    + toString() : String
+  }
+}
+
+package "com.misslumina.service" {
+  class UsuarioService
+  class ProductoService
+  class PedidoService
+  class CarritoService
+  class SesionService
+  class CategoriaService
+  class MarcaService
+  class TonoService
+  class ReporteService
+}
+
+package "com.misslumina.repository" {
+  interface UsuarioRepository
+  interface ProductoRepository
+  interface PedidoRepository
+  interface DetallePedidoRepository
+  interface CategoriaRepository
+  interface MarcaRepository
+  interface TonoRepository
+}
+
+package "com.misslumina.view" {
+  class MainLayout
+  class InicioView
+  class LoginView
+  class RegistroView
+  class CatalogoView
+  class ProductoDetalleView
+  class CarritoView
+  class RegistroPedidoView
+  class HistorialPedidosView
+  class AdminPanelView
+  class GestionProductosView
+  class GestionInventarioView
+  class GestionPedidosView
+  class GestionCategoriasMarcasView
+  class ReportesView
+}
+
+Usuario "1" -- "0..*" Pedido : realiza
+Pedido "1" *-- "1..*" DetallePedido : contiene
+Producto "1" -- "0..*" DetallePedido : aparece en
+Categoria "1" -- "0..*" Producto : clasifica (FK nombre)
+Marca "1" -- "0..*" Producto : fabrica (FK nombre)
+Tono "1" -- "0..*" Producto : color (FK nombre)
+Carrito "1" o-- "0..*" ItemCarrito : agrupa
+ItemCarrito "0..*" --> "1" Producto : referencia
+
+PedidoService ..> Pedido : registra / cambia estado
+PedidoService ..> Producto : valida stock
+PedidoService ..> Usuario : valida cliente
+CarritoService ..> Carrito : administra
+ProductoService ..> Producto : CRUD
+ReporteService ..> Pedido : consulta ventas
+UsuarioService ..> Usuario : registra / autentica
+
+MainLayout ..> InicioView
+MainLayout ..> CatalogoView
+MainLayout ..> CarritoView
+MainLayout ..> HistorialPedidosView
+MainLayout ..> AdminPanelView
+CatalogoView ..> ProductoService
+ProductoDetalleView ..> ProductoService
+CarritoView ..> CarritoService
+RegistroPedidoView ..> PedidoService
+HistorialPedidosView ..> PedidoService
+AdminPanelView ..> ReporteService
+GestionProductosView ..> ProductoService
+GestionInventarioView ..> ProductoService
+GestionPedidosView ..> PedidoService
+GestionCategoriasMarcasView ..> CategoriaService
+GestionCategoriasMarcasView ..> MarcaService
+GestionCategoriasMarcasView ..> TonoService
+ReportesView ..> ReporteService
+
+UsuarioService --> UsuarioRepository
+ProductoService --> ProductoRepository
+ProductoService --> CategoriaRepository
+ProductoService --> MarcaRepository
+ProductoService --> TonoRepository
+PedidoService --> PedidoRepository
+PedidoService --> ProductoRepository
+PedidoService --> UsuarioRepository
+CategoriaService --> CategoriaRepository
+MarcaService --> MarcaRepository
+TonoService --> TonoRepository
+ReporteService --> PedidoRepository
+ReporteService --> DetallePedidoRepository
+
+@enduml
