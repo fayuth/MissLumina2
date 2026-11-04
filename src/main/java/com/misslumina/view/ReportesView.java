@@ -21,10 +21,6 @@ import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
 
-/**
- * Reportes de ventas por rango de fechas. Los datos se agrupan en PostgreSQL
- * y se presentan en tablas Vaadin Grid.
- */
 @Route("admin/reportes")
 public class ReportesView extends BaseView implements BeforeEnterObserver {
 

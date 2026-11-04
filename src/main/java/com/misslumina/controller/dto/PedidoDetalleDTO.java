@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-/** DTO con el detalle completo de un pedido. */
 public record PedidoDetalleDTO(
         Long id,
         UUID idTransaccion,

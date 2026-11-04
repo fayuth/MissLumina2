@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
-/** API REST opcional de reportes. */
 @RestController
 @RequestMapping("/api/reportes")
 public class ReporteController {

@@ -24,20 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Pedido realizado por un cliente.
- *
- * <p>Aspectos clave para la sustentacion:</p>
- * <ul>
- *   <li>{@link #generarIdTransaccion()} usa {@link UUID#randomUUID()} para
- *       crear un identificador unico e irrepetible por transaccion.</li>
- *   <li>{@link LocalDate} guarda la fecha del pedido y {@link LocalDateTime}
- *       la fecha y hora exacta.</li>
- *   <li>La relacion 1 a muchos con {@link DetallePedido} usa
- *       {@code cascade = CascadeType.ALL} y {@code orphanRemoval = true}.</li>
- *   <li>{@link #calcularTotal()} suma subtotales y aplica el IVA.</li>
- * </ul>
- */
 @Entity
 @Table(name = "pedidos")
 public class Pedido {
@@ -172,15 +158,10 @@ public class Pedido {
         this.detalles = detalles == null ? new ArrayList<>() : new ArrayList<>(detalles);
     }
 
-    /** Funcion estatica: genera el UUID unico de la transaccion. */
     public static UUID generarIdTransaccion() {
         return UUID.randomUUID();
     }
 
-    /**
-     * Procedimiento: inicializa los datos de la transaccion.
-     * Genera UUID, fecha, fecha-hora y estado inicial si aun no existen.
-     */
     public void generarTransaccion() {
         if (this.idTransaccion == null) {
             this.idTransaccion = generarIdTransaccion();
@@ -196,11 +177,6 @@ public class Pedido {
         }
     }
 
-    /**
-     * Procedimiento de registro: valida, genera la transaccion y recalcula.
-     * Es el metodo que se puede mostrar como "RegistrarPedido()" en la
-     * sustentacion.
-     */
     public void registrarPedido() {
         if (usuario == null) {
             throw new DatosInvalidosException("El pedido debe tener un usuario.");
@@ -215,11 +191,6 @@ public class Pedido {
         recalcularTotal();
     }
 
-    /**
-     * Procedimiento: agrega un detalle validando el stock del producto.
-     * No guarda en base de datos; eso lo hace el servicio dentro de una
-     * transaccion.
-     */
     public void agregarDetalle(Producto producto, int cantidad) {
         if (producto == null) {
             throw new DatosInvalidosException("El producto del detalle no puede ser nulo.");
@@ -238,7 +209,6 @@ public class Pedido {
         recalcularTotal();
     }
 
-    /** Funcion: suma los subtotales de todos los detalles. */
     public double calcularSubtotal() {
         double suma = 0.0;
         for (DetallePedido detalle : detalles) {
@@ -247,7 +217,6 @@ public class Pedido {
         return FormatoUtil.redondear(suma);
     }
 
-    /** Funcion: suma los descuentos de los productos del pedido. */
     public double calcularDescuentoTotal() {
         double descuento = 0.0;
         for (DetallePedido detalle : detalles) {
@@ -259,22 +228,18 @@ public class Pedido {
         return FormatoUtil.redondear(descuento);
     }
 
-    /** Funcion: calcula el IVA sobre el subtotal. */
     public double calcularIva() {
         return FormatoUtil.redondear(calcularSubtotal() * IVA);
     }
 
-    /** Funcion: total del pedido = subtotal + IVA. */
     public double calcularTotal() {
         return FormatoUtil.redondear(calcularSubtotal() + calcularIva());
     }
 
-    /** Procedimiento: actualiza el atributo total con el valor calculado. */
     public void recalcularTotal() {
         this.total = calcularTotal();
     }
 
-    /** Funcion: unidades vendidas en el pedido. */
     public int calcularUnidadesVendidas() {
         int unidades = 0;
         for (DetallePedido detalle : detalles) {
@@ -283,7 +248,6 @@ public class Pedido {
         return unidades;
     }
 
-    /** Funcion: valida si el pedido puede pasar al estado indicado. */
     public boolean puedeCambiarA(String nuevoEstado) {
         if (nuevoEstado == null || nuevoEstado.equalsIgnoreCase(this.estado)) {
             return false;
@@ -299,7 +263,6 @@ public class Pedido {
         };
     }
 
-    /** Procedimiento: cambia el estado validando la transicion. */
     public void cambiarEstado(String nuevoEstado) {
         if (!puedeCambiarA(nuevoEstado)) {
             throw new DatosInvalidosException(

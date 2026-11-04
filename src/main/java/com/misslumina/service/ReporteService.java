@@ -14,10 +14,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Servicio de reportes de ventas. Agrupa consultas JPQL y calculos en Java
- * para que las vistas Vaadin solo se encarguen de pintar los datos.
- */
 @Service
 public class ReporteService {
 
@@ -105,7 +101,6 @@ public class ReporteService {
         return convertirEstados(pedidoRepository.resumenPorEstadoEntre(desde, hasta));
     }
 
-    /** Agrupa las ventas por dia para mostrarlas en una tabla resumen. */
     @Transactional(readOnly = true)
     public List<FilaReporte> ventasPorDia(LocalDate desde, LocalDate hasta) {
         Map<LocalDate, double[]> acumulado = new LinkedHashMap<>();

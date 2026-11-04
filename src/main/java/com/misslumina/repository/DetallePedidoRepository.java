@@ -27,10 +27,6 @@ public interface DetallePedidoRepository extends JpaRepository<DetallePedido, Lo
             """)
     Long unidadesVendidasEntre(@Param("desde") LocalDate desde, @Param("hasta") LocalDate hasta);
 
-    /**
-     * Productos mas vendidos. Devuelve Object[] con:
-     * [0] nombre del producto, [1] unidades, [2] ingresos.
-     */
     @Query("""
             select d.producto.nombre, sum(d.cantidad), sum(d.subtotal)
             from DetallePedido d join d.pedido p
@@ -50,10 +46,6 @@ public interface DetallePedidoRepository extends JpaRepository<DetallePedido, Lo
     List<Object[]> productosMasVendidosEntre(@Param("desde") LocalDate desde,
                                               @Param("hasta") LocalDate hasta);
 
-    /**
-     * Ventas por categoria. Devuelve Object[] con:
-     * [0] categoria, [1] unidades, [2] ingresos.
-     */
     @Query("""
             select d.producto.categoria, sum(d.cantidad), sum(d.subtotal)
             from DetallePedido d join d.pedido p

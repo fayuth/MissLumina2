@@ -8,10 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-/**
- * Marca de maquillaje (Maybelline, NARS, MAC, etc.).
- * El nombre es clave natural UNIQUE y se usa como llave foranea en productos.
- */
 @Entity
 @Table(name = "marcas",
         uniqueConstraints = @UniqueConstraint(name = "uk_marcas_nombre", columnNames = "nombre"))

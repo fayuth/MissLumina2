@@ -5,7 +5,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 
-/** Tarjeta de indicador usada en el panel administrativo y reportes. */
 public class StatCard extends Div {
 
     public StatCard(String titulo, String valor, String detalle, VaadinIcon icono) {

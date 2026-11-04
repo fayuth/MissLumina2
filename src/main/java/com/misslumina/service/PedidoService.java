@@ -25,14 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Servicio central de pedidos.
- *
- * <p>El metodo {@link #registrarPedido(Usuario, Carrito, String)} implementa
- * los 10 pasos solicitados en el enunciado y se ejecuta dentro de una unica
- * transaccion de PostgreSQL: si falla el descuento de inventario, se revierte
- * tambien el pedido y los detalles.</p>
- */
 @Service
 public class PedidoService {
 
@@ -50,19 +42,6 @@ public class PedidoService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    /**
-     * Registra un pedido completo.
-     *
-     * <ol>
-     *   <li>Valida usuario, carrito y metodo de pago.</li>
-     *   <li>Relee cada producto desde PostgreSQL con bloqueo pesimista.</li>
-     *   <li>Valida stock y calcula subtotales.</li>
-     *   <li>Genera UUID, fecha y hora.</li>
-     *   <li>Guarda pedido y detalles.</li>
-     *   <li>Descuenta inventario.</li>
-     *   <li>Confirma la transaccion (commit automatico de Spring).</li>
-     * </ol>
-     */
     @Transactional
     public Pedido registrarPedido(Usuario usuario, Carrito carrito, String metodoPago) {
         if (usuario == null || usuario.getId() == null) {
@@ -91,7 +70,6 @@ public class PedidoService {
                 throw new ProductoNoEncontradoException("Uno de los productos del carrito no existe.");
             }
 
-            // Bloqueo pesimista: evita vender la misma ultima unidad a dos clientes.
             Producto producto = productoRepository
                     .buscarPorIdParaActualizar(item.getProducto().getId())
                     .orElseThrow(() -> new ProductoNoEncontradoException(
@@ -155,10 +133,6 @@ public class PedidoService {
                 .orElseThrow(() -> new DatosInvalidosException("El pedido no existe."));
     }
 
-    /**
-     * Cambia el estado del pedido. Si se cancela, repone el inventario
-     * dentro de la misma transaccion.
-     */
     @Transactional
     public Pedido cambiarEstado(Long pedidoId, String nuevoEstado) {
         Pedido pedido = pedidoRepository.buscarPorIdConDetalles(pedidoId)

@@ -11,9 +11,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 
-/**
- * Tarjeta de producto reutilizable en la portada y el catalogo.
- */
 public class ProductoCard extends Div {
 
     private final Producto producto;

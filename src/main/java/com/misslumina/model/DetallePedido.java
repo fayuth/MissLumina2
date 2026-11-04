@@ -12,13 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-/**
- * Linea de un pedido: producto, cantidad, precio unitario y subtotal.
- *
- * <p>El subtotal se calcula con {@code cantidad * precioUnitario} y se guarda
- * en la base de datos para conservar el precio historico aunque el producto
- * cambie de precio despues.</p>
- */
 @Entity
 @Table(name = "detalle_pedido")
 public class DetallePedido {
@@ -108,11 +101,6 @@ public class DetallePedido {
         this.pedido = pedido;
     }
 
-    /**
-     * Funcion de calculo del subtotal.
-     * Se declara {@code public} para demostrar el requerimiento de metodos
-     * de calculo con parametros.
-     */
     public double calcularSubtotal(int cantidad, double precio) {
         if (cantidad <= 0) {
             throw new DatosInvalidosException("La cantidad del detalle debe ser mayor que cero.");
@@ -120,7 +108,6 @@ public class DetallePedido {
         return FormatoUtil.redondear(cantidad * precio);
     }
 
-    /** Procedimiento: recalcula y actualiza el subtotal almacenado. */
     public void recalcularSubtotal() {
         this.subtotal = calcularSubtotal(cantidad, precioUnitario);
     }

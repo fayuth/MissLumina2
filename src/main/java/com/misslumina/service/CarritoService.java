@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Servicio de carrito de compras.
- * Aplica las reglas de stock y mantiene la logica fuera de la vista.
- */
 @Service
 public class CarritoService {
 
@@ -30,7 +26,6 @@ public class CarritoService {
         return getCarrito().getItems();
     }
 
-    /** Procedimiento: agrega unidades validando stock y limite por producto. */
     public void agregar(Producto producto, int cantidad) {
         if (producto == null) {
             throw new DatosInvalidosException("Debe seleccionar un producto.");

@@ -1,39 +1,9 @@
--- ============================================================================
--- MISS LUMINA - Script oficial de base de datos PostgreSQL
--- ----------------------------------------------------------------------------
--- Contenido:
---   1. CREATE DATABASE
---   2. DROP / CREATE TABLE
---   3. ALTER TABLE (llaves foraneas y restricciones)
---   4. INSERT (datos de demostracion)
---   5. SELECT, UPDATE y DELETE de ejemplo
---
--- Ejecucion recomendada con psql:
---   psql -U postgres -f database/miss_lumina_db.sql
---
--- Si se ejecuta desde pgAdmin, ejecutar primero CREATE DATABASE y luego el
--- resto del script conectado a la base miss_lumina_db (las lineas \connect
--- son propias de psql).
---
--- Cuentas de prueba:
---   Administrador: admin@misslumina.com   / Admin123*
---   Cliente:       cliente@misslumina.com / Cliente123*
---
--- Las contrasenas se almacenan como hash SHA-256, nunca en texto plano.
--- ============================================================================
-
--- ----------------------------------------------------------------------------
--- 1. CREACION DE LA BASE DE DATOS
--- ----------------------------------------------------------------------------
 CREATE DATABASE miss_lumina_db
     WITH ENCODING 'UTF8'
     TEMPLATE template0;
 
 \connect miss_lumina_db
 
--- ----------------------------------------------------------------------------
--- 2. TABLAS
--- ----------------------------------------------------------------------------
 DROP TABLE IF EXISTS detalle_pedido CASCADE;
 DROP TABLE IF EXISTS pedidos CASCADE;
 DROP TABLE IF EXISTS productos CASCADE;
@@ -121,9 +91,6 @@ CREATE TABLE detalle_pedido (
     CONSTRAINT chk_detalle_subtotal CHECK (subtotal >= 0)
 );
 
--- ----------------------------------------------------------------------------
--- 3. ALTER TABLE: llaves foraneas, restricciones e indices
--- ----------------------------------------------------------------------------
 ALTER TABLE usuarios
     ADD CONSTRAINT chk_usuarios_rol CHECK (rol IN ('CLIENTE', 'ADMINISTRADOR'));
 
@@ -159,9 +126,6 @@ CREATE INDEX idx_pedidos_fecha ON pedidos (fecha_pedido);
 CREATE INDEX idx_detalle_pedido ON detalle_pedido (pedido_id);
 CREATE INDEX idx_detalle_producto ON detalle_pedido (producto_id);
 
--- ----------------------------------------------------------------------------
--- 4. INSERT: datos de demostracion
--- ----------------------------------------------------------------------------
 INSERT INTO categorias (nombre, descripcion) VALUES
     ('Labiales', 'Labiales mate, cremosos y liquidos.'),
     ('Bases', 'Bases de maquillaje para todo tipo de piel.'),
@@ -195,7 +159,6 @@ INSERT INTO tonos (nombre, codigo_hex) VALUES
     ('Natural', '#E3C3A3'),
     ('Rosa Romantico', '#D98A9A');
 
--- Hash SHA-256 de Admin123* y Cliente123*
 INSERT INTO usuarios (nombre, correo, contrasena, rol, telefono, fecha_registro) VALUES
     ('Administradora Miss Lumina', 'admin@misslumina.com',
      '0a5bc3e342432f1bad92ffd51b785343ec72906cdba6a26131060b008e786656',
@@ -253,7 +216,6 @@ VALUES
      'Labial liquido de acabado mate y tono rosa romantico.',
      37900, 42900, 16, 'Yanbal', 'Labiales', 'Rosa Romantico', TRUE);
 
--- Pedidos de demostracion. Los totales incluyen IVA del 19%.
 INSERT INTO pedidos
     (id_transaccion, fecha_pedido, fecha_hora_pedido, estado, total, metodo_pago, usuario_id)
 VALUES
@@ -286,23 +248,17 @@ VALUES
      (SELECT id FROM productos WHERE nombre = 'Delineador Tattoo'),
      3, 27900.00, 83700.00);
 
--- Producto temporal para demostrar UPDATE y DELETE.
 INSERT INTO productos
     (nombre, descripcion, precio, precio_anterior, stock, marca, categoria, tono, disponible)
 VALUES
     ('Producto temporal de prueba', 'Registro usado para demostrar UPDATE y DELETE.',
      10000, 0, 5, 'Vogue', 'Polvos', 'Natural', TRUE);
 
--- ----------------------------------------------------------------------------
--- 5. CONSULTAS DE EJEMPLO
--- ----------------------------------------------------------------------------
--- 5.1 Productos con su categoria, marca y tono.
 SELECT p.id, p.nombre, p.categoria, p.marca, p.tono, p.precio, p.stock,
        (p.stock * p.precio) AS valor_inventario
 FROM productos p
 ORDER BY p.nombre;
 
--- 5.2 Pedidos con el nombre del cliente y sus unidades vendidas.
 SELECT p.id, p.id_transaccion, p.fecha_pedido, p.estado, p.total,
        u.nombre AS cliente,
        COALESCE(SUM(d.cantidad), 0) AS unidades
@@ -312,13 +268,11 @@ LEFT JOIN detalle_pedido d ON d.pedido_id = p.id
 GROUP BY p.id, p.id_transaccion, p.fecha_pedido, p.estado, p.total, u.nombre
 ORDER BY p.fecha_hora_pedido DESC;
 
--- 5.3 Productos con stock bajo (5 unidades o menos).
 SELECT nombre, marca, stock
 FROM productos
 WHERE stock <= 5
 ORDER BY stock ASC;
 
--- 5.4 Detalle completo de un pedido por UUID.
 SELECT p.id_transaccion, pr.nombre AS producto, d.cantidad,
        d.precio_unitario, d.subtotal
 FROM pedidos p
@@ -326,16 +280,13 @@ JOIN detalle_pedido d ON d.pedido_id = p.id
 JOIN productos pr ON pr.id = d.producto_id
 WHERE p.id_transaccion = '11111111-1111-4111-8111-111111111111';
 
--- 5.5 Actualizacion de precio y stock de un producto.
 UPDATE productos
 SET precio = 31900.00, stock = 28
 WHERE nombre = 'Labial Mate Luminoso';
 
--- 5.6 Eliminacion del producto temporal (no tiene pedidos asociados).
 DELETE FROM productos
 WHERE nombre = 'Producto temporal de prueba';
 
--- 5.7 Verificacion final.
 SELECT COUNT(*) AS total_productos FROM productos;
 SELECT COUNT(*) AS total_pedidos FROM pedidos;
 SELECT COUNT(*) AS total_usuarios FROM usuarios;

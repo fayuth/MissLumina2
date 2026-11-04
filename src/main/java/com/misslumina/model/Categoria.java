@@ -8,11 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-/**
- * Categoria maestra del catalogo (Labiales, Bases, Sombras, etc.).
- * Se relaciona con productos mediante el nombre (clave natural UNIQUE)
- * y una llave foranea en PostgreSQL.
- */
 @Entity
 @Table(name = "categorias",
         uniqueConstraints = @UniqueConstraint(name = "uk_categorias_nombre", columnNames = "nombre"))

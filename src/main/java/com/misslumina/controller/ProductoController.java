@@ -10,11 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * API REST opcional de consulta de productos.
- * La interfaz principal es Vaadin, pero esta capa demuestra la separacion
- * controlador -> servicio -> repositorio y permite probar con Postman.
- */
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {

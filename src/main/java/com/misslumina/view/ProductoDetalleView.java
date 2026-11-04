@@ -18,10 +18,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 
-/**
- * Detalle de un producto. La ruta recibe el id como parametro:
- * /producto/1, /producto/2, etc.
- */
 @Route("producto/:productoId")
 public class ProductoDetalleView extends BaseView implements BeforeEnterObserver {
 

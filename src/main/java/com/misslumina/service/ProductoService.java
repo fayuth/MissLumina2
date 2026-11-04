@@ -77,9 +77,6 @@ public class ProductoService {
         return productoRepository.findByDisponibleTrueOrderByNombreAsc();
     }
 
-    /**
-     * Crea o actualiza un producto aplicando todas las validaciones de negocio.
-     */
     @Transactional
     public Producto guardar(Producto producto) {
         if (producto == null) {
@@ -137,7 +134,6 @@ public class ProductoService {
         }
     }
 
-    /** Procedimiento: ajusta el inventario desde el panel administrativo. */
     @Transactional
     public Producto actualizarStock(Long productoId, int nuevoStock) {
         if (nuevoStock < 0) {
@@ -164,7 +160,6 @@ public class ProductoService {
         productoRepository.save(producto);
     }
 
-    /** Procedimiento: elimina un producto si no tiene ventas asociadas. */
     @Transactional
     public void eliminar(Long productoId) {
         Producto producto = productoRepository.findById(productoId)

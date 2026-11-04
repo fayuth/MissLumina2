@@ -21,10 +21,6 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
-/**
- * Catalogo con busqueda por texto, categoria, marca y tono.
- * Las consultas se ejecutan en PostgreSQL mediante ProductoService.
- */
 @Route("catalogo")
 public class CatalogoView extends BaseView implements BeforeEnterObserver {
 

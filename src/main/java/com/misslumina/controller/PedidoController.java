@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/** API REST opcional para consultar pedidos. */
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {

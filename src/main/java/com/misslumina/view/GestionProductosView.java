@@ -23,10 +23,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 
-/**
- * CRUD de productos. El administrador puede crear, editar, activar,
- * desactivar y eliminar productos sin ventas asociadas.
- */
 @Route("admin/productos")
 public class GestionProductosView extends BaseView implements BeforeEnterObserver {
 

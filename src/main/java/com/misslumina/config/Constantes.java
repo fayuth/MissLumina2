@@ -2,19 +2,10 @@ package com.misslumina.config;
 
 import java.util.List;
 
-/**
- * Constantes generales de la aplicacion.
- *
- * <p>Se declaran con {@code public static final} para que sean valores fijos
- * y compartidos. Los valores propios del dominio (IVA, estados, roles)
- * tambien aparecen en las clases del modelo donde se utilizan.</p>
- */
 public final class Constantes {
 
-    /** IVA colombiano vigente: 19%. */
     public static final double IVA = 0.19;
 
-    /** Stock a partir del cual se considera que un producto esta bajo. */
     public static final int STOCK_MINIMO = 5;
 
     public static final String ROL_CLIENTE = "CLIENTE";
@@ -43,6 +34,5 @@ public final class Constantes {
     );
 
     private Constantes() {
-        // No se instancia.
     }
 }

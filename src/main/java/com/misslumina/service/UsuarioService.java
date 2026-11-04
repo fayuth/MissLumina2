@@ -17,10 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Servicio de usuarios: registro, autenticacion y consultas.
- * Toda la logica de negocio queda fuera de las vistas Vaadin.
- */
 @Service
 public class UsuarioService {
 
@@ -32,10 +28,6 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    /**
-     * Registra un cliente. Valida datos, verifica que el correo no exista
-     * y guarda la contrasena como hash SHA-256.
-     */
     @Transactional
     public Usuario registrarCliente(String nombre, String correo, String contrasena,
                                     String telefono) {
@@ -78,10 +70,6 @@ public class UsuarioService {
         }
     }
 
-    /**
-     * Autentica por correo y contrasena.
-     * El mensaje de error es generico para no revelar si el correo existe.
-     */
     @Transactional(readOnly = true)
     public Usuario autenticar(String correo, String contrasena) {
         String correoLimpio = ValidacionUtil.limpiar(correo);
@@ -124,7 +112,6 @@ public class UsuarioService {
         return usuarioRepository.count();
     }
 
-    /** Procedimiento: actualiza el telefono del usuario. */
     @Transactional
     public void actualizarTelefono(Long usuarioId, String telefono) {
         Usuario usuario = buscarPorId(usuarioId);
@@ -135,7 +122,6 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
-    /** Procedimiento: cambia la contrasena guardando siempre el hash. */
     @Transactional
     public void cambiarContrasena(Long usuarioId, String contrasenaActual, String contrasenaNueva) {
         Usuario usuario = buscarPorId(usuarioId);

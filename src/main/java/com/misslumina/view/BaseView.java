@@ -11,9 +11,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 
-/**
- * Base comun de las vistas: titulos, tarjetas y control de acceso.
- */
 public abstract class BaseView extends VerticalLayout {
 
     protected BaseView() {
@@ -61,7 +58,6 @@ public abstract class BaseView extends VerticalLayout {
         return fila;
     }
 
-    /** Redirige al login si no hay sesion activa. */
     protected boolean protegerSesion(BeforeEnterEvent event, SesionService sesion) {
         if (!sesion.estaAutenticado()) {
             UiUtils.advertencia("Debe iniciar sesion para continuar.");
@@ -71,7 +67,6 @@ public abstract class BaseView extends VerticalLayout {
         return true;
     }
 
-    /** Redirige al inicio si el usuario no es administrador. */
     protected boolean protegerAdministrador(BeforeEnterEvent event, SesionService sesion) {
         if (!protegerSesion(event, sesion)) {
             return false;

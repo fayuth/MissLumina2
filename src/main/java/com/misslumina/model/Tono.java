@@ -8,10 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-/**
- * Tono de maquillaje administrable (Rojo Pasion, Nude, Negro Intenso...).
- * El producto guarda el nombre del tono y PostgreSQL valida la llave foranea.
- */
 @Entity
 @Table(name = "tonos",
         uniqueConstraints = @UniqueConstraint(name = "uk_tonos_nombre", columnNames = "nombre"))

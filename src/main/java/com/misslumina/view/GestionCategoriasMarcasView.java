@@ -25,9 +25,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 
-/**
- * Administracion de las tablas maestras: categorias, marcas y tonos.
- */
 @Route("admin/catalogos")
 public class GestionCategoriasMarcasView extends BaseView implements BeforeEnterObserver {
 

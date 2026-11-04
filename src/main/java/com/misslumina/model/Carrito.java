@@ -9,13 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Carrito de compras en memoria (no es una entidad JPA).
- *
- * <p>Se guarda en la sesion Vaadin para que cada cliente tenga su propio
- * carrito. Al confirmar el pedido, el servicio relee los productos desde
- * PostgreSQL y descuenta el inventario dentro de una transaccion.</p>
- */
 public class Carrito {
 
     public static final int MAX_UNIDADES_POR_PRODUCTO = 20;
@@ -25,7 +18,6 @@ public class Carrito {
     public Carrito() {
     }
 
-    /** Procedimiento: agrega un producto o incrementa su cantidad. */
     public void agregarProducto(Producto producto, int cantidad) {
         if (producto == null) {
             throw new DatosInvalidosException("Debe seleccionar un producto.");
@@ -55,7 +47,6 @@ public class Carrito {
         }
     }
 
-    /** Procedimiento: actualiza la cantidad de un producto del carrito. */
     public void actualizarCantidad(Long productoId, int cantidad) {
         ItemCarrito item = buscarItem(productoId);
         if (item == null) {
@@ -76,13 +67,11 @@ public class Carrito {
         item.setCantidad(cantidad);
     }
 
-    /** Procedimiento: elimina un producto del carrito. */
     public void eliminarProducto(Long productoId) {
         items.removeIf(item -> item.getProducto() != null
                 && Objects.equals(item.getProducto().getId(), productoId));
     }
 
-    /** Procedimiento: vacia el carrito despues de confirmar el pedido. */
     public void vaciar() {
         items.clear();
     }
@@ -97,7 +86,6 @@ public class Carrito {
         return null;
     }
 
-    /** Funcion: subtotal de todos los productos. */
     public double calcularSubtotal() {
         double suma = 0.0;
         for (ItemCarrito item : items) {
@@ -106,17 +94,14 @@ public class Carrito {
         return FormatoUtil.redondear(suma);
     }
 
-    /** Funcion: IVA del carrito (19%). */
     public double calcularIva() {
         return FormatoUtil.redondear(calcularSubtotal() * Pedido.IVA);
     }
 
-    /** Funcion: total a pagar. */
     public double calcularTotal() {
         return FormatoUtil.redondear(calcularSubtotal() + calcularIva());
     }
 
-    /** Funcion: ahorro total por precios anteriores. */
     public double calcularAhorro() {
         double ahorro = 0.0;
         for (ItemCarrito item : items) {
@@ -127,7 +112,6 @@ public class Carrito {
         return FormatoUtil.redondear(ahorro);
     }
 
-    /** Funcion: cantidad total de unidades en el carrito. */
     public int getCantidadTotal() {
         int total = 0;
         for (ItemCarrito item : items) {

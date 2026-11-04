@@ -10,10 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-/**
- * Traduce excepciones de negocio a respuestas JSON comprensibles
- * para la API REST. Tambien registra los errores en el log.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
