@@ -41,11 +41,6 @@ public class TonoService {
         return listarActivos().stream().map(Tono::getNombre).toList();
     }
 
-    /**
-     * Guarda un tono. Si cambia el nombre, PostgreSQL propaga el cambio a
-     * productos mediante ON UPDATE CASCADE. Ademas se actualiza de forma
-     * explicita para que el cambio se vea incluso antes del commit.
-     */
     @Transactional
     public Tono guardar(Tono tono) {
         if (tono == null) {

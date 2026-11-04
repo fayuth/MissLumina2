@@ -21,10 +21,6 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
-/**
- * Inicio de sesion. Valida credenciales contra PostgreSQL y guarda el
- * usuario en la sesion Vaadin.
- */
 @Route("login")
 public class LoginView extends BaseView implements BeforeEnterObserver {
 
@@ -108,4 +104,3 @@ public class LoginView extends BaseView implements BeforeEnterObserver {
         add(tarjeta);
     }
 }
-

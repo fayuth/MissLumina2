@@ -16,11 +16,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.router.RouterLink;
 
-/**
- * Layout principal de la tienda: barra superior, menu lateral y contenido.
- * Vaadin lo aplica automaticamente a todas las vistas que no indican otro
- * layout, gracias a la anotacion {@link Layout}.
- */
 @Layout
 public class MainLayout extends AppLayout {
 

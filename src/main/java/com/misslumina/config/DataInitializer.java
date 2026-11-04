@@ -24,13 +24,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Carga datos de demostracion la primera vez que arranca la aplicacion.
- *
- * <p>Si la base ya contiene datos (por ejemplo, porque se ejecuto el script
- * SQL), no vuelve a insertar nada. Asi se puede demostrar el sistema sin
- * escribir datos a mano.</p>
- */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -75,8 +68,6 @@ public class DataInitializer implements CommandLineRunner {
             log.info("Datos de demostracion verificados. Admin: {} / {} | Cliente: {} / {}",
                     CORREO_ADMIN, CLAVE_ADMIN, CORREO_CLIENTE, CLAVE_CLIENTE);
         } catch (Exception e) {
-            // No se detiene la aplicacion: el profesor puede revisar el log
-            // y corregir la conexion o ejecutar el script SQL manualmente.
             log.error("No se pudieron cargar los datos iniciales. "
                     + "Verifique la conexion con PostgreSQL.", e);
         }

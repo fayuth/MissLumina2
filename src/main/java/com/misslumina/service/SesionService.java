@@ -7,13 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-/**
- * Maneja el estado de la sesion web: usuario autenticado y carrito.
- *
- * <p>No se usa Spring Security para mantener el proyecto simple y facil de
- * explicar. El usuario se guarda en la {@link VaadinSession}; las vistas
- * administrativas verifican el rol antes de mostrar informacion sensible.</p>
- */
 @Service
 public class SesionService {
 
@@ -73,10 +66,6 @@ public class SesionService {
         return usuario == null ? "Invitada" : usuario.getNombreCorto();
     }
 
-    /**
-     * Devuelve el carrito de la sesion. Si no existe lo crea.
-     * Cada cliente que abre la tienda obtiene un carrito independiente.
-     */
     public Carrito getCarrito() {
         VaadinSession session = VaadinSession.getCurrent();
         if (session == null) {

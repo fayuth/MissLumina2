@@ -28,10 +28,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Gestion de pedidos: filtros por estado y fecha, consulta del detalle y
- * cambio de estado con validacion de transiciones.
- */
 @Route("admin/pedidos")
 public class GestionPedidosView extends BaseView implements BeforeEnterObserver {
 

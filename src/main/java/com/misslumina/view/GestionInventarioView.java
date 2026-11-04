@@ -26,10 +26,6 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
-/**
- * Control de inventario: consulta de unidades, valor del inventario y
- * ajuste manual de existencias.
- */
 @Route("admin/inventario")
 public class GestionInventarioView extends BaseView implements BeforeEnterObserver {
 

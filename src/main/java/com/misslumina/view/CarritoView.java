@@ -18,10 +18,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-/**
- * Carrito de compras en memoria. Cada cambio se refleja de inmediato en la
- * sesion y en el contador de la barra superior.
- */
 @Route("carrito")
 public class CarritoView extends BaseView {
 

@@ -2,10 +2,6 @@ package com.misslumina.util;
 
 import java.util.regex.Pattern;
 
-/**
- * Validaciones reutilizables de datos de entrada.
- * Se aplican tanto en los formularios Vaadin como en los servicios.
- */
 public final class ValidacionUtil {
 
     private static final Pattern CORREO =

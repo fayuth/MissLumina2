@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/** DTO para listar pedidos sin exponer entidades JPA ni relaciones lazy. */
 public record PedidoResumenDTO(
         Long id,
         UUID idTransaccion,

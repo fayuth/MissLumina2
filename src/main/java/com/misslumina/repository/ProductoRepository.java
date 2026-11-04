@@ -15,11 +15,6 @@ import java.util.Optional;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
-    /**
-     * Busqueda combinada por texto, categoria, marca y tono.
-     * Spring Data JPA genera una consulta con parametros enlazados
-     * (PreparedStatement), lo que evita SQL Injection.
-     */
     @Query("""
             select p from Producto p
             where (:texto = '' or lower(p.nombre) like lower(concat('%', :texto, '%'))
@@ -62,11 +57,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Query("select count(p) from Producto p where p.stock <= :minimo")
     long contarStockBajo(@Param("minimo") int minimo);
 
-    /**
-     * Bloqueo pesimista: la fila queda bloqueada hasta que termine la
-     * transaccion. Asi dos clientes no pueden comprar la ultima unidad
-     * al mismo tiempo.
-     */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Producto p where p.id = :id")
     Optional<Producto> buscarPorIdParaActualizar(@Param("id") Long id);

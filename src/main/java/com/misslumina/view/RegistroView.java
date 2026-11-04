@@ -20,10 +20,6 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
-/**
- * Registro de nuevos clientes. Al crear la cuenta se inicia sesion
- * automaticamente para que la persona pueda continuar comprando.
- */
 @Route("registro")
 public class RegistroView extends BaseView implements BeforeEnterObserver {
 

@@ -22,10 +22,6 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
-/**
- * Historial de pedidos del cliente autenticado, con el detalle de cada
- * transaccion y su UUID.
- */
 @Route("historial")
 public class HistorialPedidosView extends BaseView implements BeforeEnterObserver {
 

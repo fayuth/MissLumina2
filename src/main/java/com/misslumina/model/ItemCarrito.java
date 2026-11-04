@@ -3,10 +3,6 @@ package com.misslumina.model;
 import com.misslumina.exception.DatosInvalidosException;
 import com.misslumina.util.FormatoUtil;
 
-/**
- * Linea del carrito de compras.
- * Es una clase de apoyo que vive en memoria mientras el cliente navega.
- */
 public class ItemCarrito {
 
     private Producto producto;

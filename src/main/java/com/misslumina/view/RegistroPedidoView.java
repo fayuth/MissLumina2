@@ -25,10 +25,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 
-/**
- * Confirmacion del pedido. Aqui se ejecuta el flujo transaccional completo:
- * validacion, stock, subtotales, UUID, fecha, guardado y descuento.
- */
 @Route("checkout")
 public class RegistroPedidoView extends BaseView implements BeforeEnterObserver {
 

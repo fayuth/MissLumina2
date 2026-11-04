@@ -23,9 +23,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-/**
- * Portada de la tienda: bienvenida, categorias y productos destacados.
- */
 @Route("")
 @RouteAlias("inicio")
 public class InicioView extends BaseView {
@@ -163,4 +160,3 @@ public class InicioView extends BaseView {
         return div;
     }
 }
-

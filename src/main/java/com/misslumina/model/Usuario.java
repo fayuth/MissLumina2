@@ -11,20 +11,6 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Usuario de la tienda. Puede tener rol CLIENTE o ADMINISTRADOR.
- *
- * <p>Conceptos de POO demostrados:</p>
- * <ul>
- *   <li>Encapsulamiento: todos los atributos son {@code private}.</li>
- *   <li>Constructores: uno por defecto y uno parametrizado.</li>
- *   <li>Getters/setters para acceder a los datos.</li>
- *   <li>Metodos de procedimiento ({@link #marcarComoAdministrador()}) y
- *       funciones ({@link #esAdministrador()}).</li>
- *   <li>Constantes con {@code final}.</li>
- *   <li>Uso de {@link LocalDate} para la fecha de registro.</li>
- * </ul>
- */
 @Entity
 @Table(name = "usuarios",
         uniqueConstraints = @UniqueConstraint(name = "uk_usuarios_correo", columnNames = "correo"))
@@ -59,13 +45,11 @@ public class Usuario {
     @Column(name = "fecha_registro", nullable = false)
     private LocalDate fechaRegistro;
 
-    /** Constructor por defecto exigido por JPA y por el requerimiento academico. */
     public Usuario() {
         this.rol = ROL_CLIENTE;
         this.fechaRegistro = LocalDate.now();
     }
 
-    /** Constructor parametrizado para registrar un cliente desde el formulario. */
     public Usuario(String nombre, String correo, String contrasena, String telefono) {
         this();
         this.nombre = nombre;
@@ -130,27 +114,22 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
-    /** Funcion: indica si el usuario es administrador. */
     public boolean esAdministrador() {
         return ROL_ADMINISTRADOR.equalsIgnoreCase(rol);
     }
 
-    /** Funcion: indica si el usuario es cliente. */
     public boolean esCliente() {
         return ROL_CLIENTE.equalsIgnoreCase(rol);
     }
 
-    /** Procedimiento: cambia el rol a administrador. */
     public void marcarComoAdministrador() {
         this.rol = ROL_ADMINISTRADOR;
     }
 
-    /** Funcion: devuelve la fecha de registro lista para mostrar. */
     public String getFechaRegistroFormateada() {
         return fechaRegistro == null ? "" : fechaRegistro.format(FORMATO_FECHA);
     }
 
-    /** Funcion: nombre corto para la barra superior. */
     public String getNombreCorto() {
         if (nombre == null || nombre.isBlank()) {
             return "Usuario";

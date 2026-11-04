@@ -24,9 +24,6 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
-/**
- * Panel principal de administracion con indicadores y accesos rapidos.
- */
 @Route("admin")
 public class AdminPanelView extends BaseView implements BeforeEnterObserver {
 

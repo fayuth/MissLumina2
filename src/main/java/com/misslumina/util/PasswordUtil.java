@@ -5,17 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 
-/**
- * Hash de contrasenas con SHA-256.
- *
- * <p>En la base de datos nunca se guarda la contrasena original. Se guarda
- * el hash hexadecimal y al iniciar sesion se vuelve a calcular el hash de la
- * clave digitada para compararlo.</p>
- *
- * <p>Para un proyecto productivo se recomienda BCrypt o Argon2 con sal por
- * usuario; SHA-256 se usa aqui por simplicidad academica y porque evita
- * almacenar texto plano.</p>
- */
 public final class PasswordUtil {
 
     public static final String ALGORITMO = "SHA-256";

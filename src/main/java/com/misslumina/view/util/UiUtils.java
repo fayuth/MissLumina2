@@ -11,10 +11,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-/**
- * Utilidades de interfaz: notificaciones, dialogos de confirmacion y
- * actualizacion del contador del carrito.
- */
 public final class UiUtils {
 
     private UiUtils() {
@@ -50,10 +46,6 @@ public final class UiUtils {
         }
     }
 
-    /**
-     * Muestra un dialogo de confirmacion y ejecuta la accion solo si la
-     * persona confirma.
-     */
     public static void confirmar(String titulo, String mensaje, Runnable accion) {
         Dialog dialog = new Dialog();
         dialog.setHeaderTitle(titulo);
@@ -76,7 +68,6 @@ public final class UiUtils {
         return fila;
     }
 
-    /** Actualiza el contador del carrito del header sin recargar la pagina. */
     public static void actualizarContadorCarrito(int unidades) {
         UI ui = UI.getCurrent();
         if (ui != null) {
