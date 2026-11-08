@@ -1,6 +1,6 @@
 package com.misslumina.repository;
 
-import com.misslumina.model.Tono;
+import com.misslumina.model.catalog.Tono;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

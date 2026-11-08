@@ -181,9 +181,18 @@ body {
     min-width: 220px;
     max-width: 300px;
     box-sizing: border-box;
+    overflow: hidden;
     border: 1px solid var(--ml-line);
     border-radius: var(--ml-radius);
     background: var(--ml-bg);
+}
+
+.product-image {
+    display: block;
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    background: #fafafa;
 }
 
 .product-body {
@@ -204,6 +213,17 @@ body {
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.25;
+}
+
+.product-description {
+    display: -webkit-box;
+    overflow: hidden;
+    min-height: 2.4em;
+    color: var(--ml-muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .product-tone {
@@ -319,11 +339,30 @@ body {
 }
 
 .detail-layout {
-    display: block;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
     padding: 1rem;
     border: 1px solid var(--ml-line);
     border-radius: var(--ml-radius);
     background: var(--ml-bg);
+}
+
+.detail-image-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--ml-line);
+    border-radius: var(--ml-radius);
+    background: #fafafa;
+}
+
+.detail-image {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .detail-info {
@@ -590,6 +629,35 @@ body {
     border-radius: var(--ml-radius);
 }
 
+.grid-product-image {
+    display: block;
+    width: 56px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #fafafa;
+}
+
+.form-image-preview {
+    display: block;
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border: 1px solid var(--ml-line);
+    border-radius: var(--ml-radius);
+    background: #fafafa;
+}
+
+.product-image-upload {
+    width: 100%;
+}
+
+.form-help {
+    color: var(--ml-muted);
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
 vaadin-grid {
     border-radius: var(--ml-radius);
     overflow: hidden;
@@ -630,6 +698,10 @@ vaadin-grid::part(header-cell) {
 
     .product-card {
         max-width: none;
+    }
+
+    .detail-layout {
+        grid-template-columns: 1fr;
     }
 
     .stat-card {
