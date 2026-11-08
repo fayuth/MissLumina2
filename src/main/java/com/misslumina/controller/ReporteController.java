@@ -1,6 +1,6 @@
 package com.misslumina.controller;
 
-import com.misslumina.service.ReporteService;
+import com.misslumina.service.admin.ReporteService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

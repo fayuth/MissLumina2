@@ -1,18 +1,18 @@
 package com.misslumina.config;
 
-import com.misslumina.model.Categoria;
-import com.misslumina.model.Marca;
-import com.misslumina.model.Pedido;
-import com.misslumina.model.Producto;
-import com.misslumina.model.Tono;
-import com.misslumina.model.Usuario;
+import com.misslumina.model.catalog.Categoria;
+import com.misslumina.model.catalog.Marca;
+import com.misslumina.model.ecommerce.Pedido;
+import com.misslumina.model.catalog.Producto;
+import com.misslumina.model.catalog.Tono;
+import com.misslumina.model.core.Usuario;
 import com.misslumina.repository.CategoriaRepository;
 import com.misslumina.repository.MarcaRepository;
 import com.misslumina.repository.PedidoRepository;
 import com.misslumina.repository.ProductoRepository;
 import com.misslumina.repository.TonoRepository;
 import com.misslumina.repository.UsuarioRepository;
-import com.misslumina.service.ProductoService;
+import com.misslumina.service.catalog.ProductoService;
 import com.misslumina.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +29,10 @@ public class DataInitializer implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
-    private static final String CORREO_ADMIN = "admin@misslumina.com";
-    private static final String CLAVE_ADMIN = "Admin123*";
-    private static final String CORREO_CLIENTE = "cliente@misslumina.com";
-    private static final String CLAVE_CLIENTE = "Cliente123*";
+    private static final String CORREO_ADMIN = "fayuthr4@gmail.com";
+    private static final String CLAVE_ADMIN = "SingOfRegret@23";
+    private static final String CORREO_CLIENTE = "fayuthr1@gmail.com";
+    private static final String CLAVE_CLIENTE = "SingOfRegret@23";
 
     private final UsuarioRepository usuarioRepository;
     private final CategoriaRepository categoriaRepository;
@@ -76,14 +76,14 @@ public class DataInitializer implements CommandLineRunner {
     private void sembrarUsuarios() {
         if (usuarioRepository.findByCorreoIgnoreCase(CORREO_ADMIN).isEmpty()) {
             Usuario admin = new Usuario("Administradora Miss Lumina", CORREO_ADMIN,
-                    PasswordUtil.hashear(CLAVE_ADMIN), "3001234567");
+                    PasswordUtil.hashear(CLAVE_ADMIN), "3005053089");
             admin.setRol(Usuario.ROL_ADMINISTRADOR);
             admin.setFechaRegistro(LocalDate.now().minusMonths(6));
             usuarioRepository.save(admin);
             log.info("Usuario administrador creado: {}", CORREO_ADMIN);
         }
         if (usuarioRepository.findByCorreoIgnoreCase(CORREO_CLIENTE).isEmpty()) {
-            Usuario cliente = new Usuario("Valentina Gomez", CORREO_CLIENTE,
+            Usuario cliente = new Usuario("Fayuth Rojas", CORREO_CLIENTE,
                     PasswordUtil.hashear(CLAVE_CLIENTE), "3109876543");
             cliente.setRol(Usuario.ROL_CLIENTE);
             cliente.setFechaRegistro(LocalDate.now().minusMonths(2));
@@ -130,49 +130,64 @@ public class DataInitializer implements CommandLineRunner {
         }
         productoService.guardar(new Producto(
                 "Labial Mate Luminoso", "Labial de larga duracion con acabado mate y confort.",
-                32900, 39900, 25, "Maybelline", "Labiales", "Rojo Pasion"));
+                32900, 39900, 25, "Maybelline", "Labiales", "Rojo Pasion",
+                "/images/productos/labial-mate-luminoso.svg"));
         productoService.guardar(new Producto(
                 "Base Fit Me", "Base liquida de cobertura media, ideal para piel mixta.",
-                54900, 62900, 18, "Maybelline", "Bases", "220 Natural"));
+                54900, 62900, 18, "Maybelline", "Bases", "220 Natural",
+                "/images/productos/base-fit-me.svg"));
         productoService.guardar(new Producto(
                 "Paleta de Sombras Nude", "Doce tonos nude con acabados mate y satinado.",
-                129900, 149900, 10, "NARS", "Sombras", "Nude"));
+                129900, 149900, 10, "NARS", "Sombras", "Nude",
+                "/images/productos/paleta-sombras-nude.svg"));
         productoService.guardar(new Producto(
                 "Rubor en Polvo Orgasm", "Rubor iconico con destellos dorados.",
-                119900, 0, 7, "NARS", "Rubores", "Orgasm"));
+                119900, 0, 7, "NARS", "Rubores", "Orgasm",
+                "/images/productos/rubor-polvo-orgasm.svg"));
         productoService.guardar(new Producto(
                 "Delineador Tattoo", "Delineador liquido de punta fina y alta duracion.",
-                27900, 0, 30, "Maybelline", "Delineadores", "Negro Intenso"));
+                27900, 0, 30, "Maybelline", "Delineadores", "Negro Intenso",
+                "/images/productos/delineador-tattoo.svg"));
         productoService.guardar(new Producto(
                 "Mascara Lash Sensational", "Mascara que separa y da volumen a las pestanas.",
-                45900, 52900, 22, "Maybelline", "Mascaras de pestanas", "Negro"));
+                45900, 52900, 22, "Maybelline", "Mascaras de pestanas", "Negro",
+                "/images/productos/mascara-lash-sensational.svg"));
         productoService.guardar(new Producto(
                 "Labial Vinyl Ink", "Labial liquido con acabado vinilo y 16 horas de color.",
-                41900, 0, 15, "L'Oreal", "Labiales", "02 Coy"));
+                41900, 0, 15, "L'Oreal", "Labiales", "02 Coy",
+                "/images/productos/labial-vinyl-ink.svg"));
         productoService.guardar(new Producto(
                 "Base True Match", "Base con tecnologia de match perfecto para cada tono.",
-                59900, 0, 12, "L'Oreal", "Bases", "W3 Golden Beige"));
+                59900, 0, 12, "L'Oreal", "Bases", "W3 Golden Beige",
+                "/images/productos/base-true-match.svg"));
         productoService.guardar(new Producto(
                 "Sombra Individual Nude", "Sombra de alta pigmentacion y facil difuminado.",
-                18900, 0, 40, "Vogue", "Sombras", "Cafe"));
+                18900, 0, 40, "Vogue", "Sombras", "Cafe",
+                "/images/productos/sombra-individual-nude.svg"));
         productoService.guardar(new Producto(
                 "Rubor Cremoso Coral", "Rubor cremoso que se funde con la piel.",
-                34900, 39900, 3, "Yanbal", "Rubores", "Coral"));
+                34900, 39900, 3, "Yanbal", "Rubores", "Coral",
+                "/images/productos/rubor-cremoso-coral.svg"));
         productoService.guardar(new Producto(
                 "Delineador Retractil", "Delineador de ojos retractil con difuminador.",
-                89900, 0, 6, "MAC", "Delineadores", "Marron"));
+                89900, 0, 6, "MAC", "Delineadores", "Marron",
+                "/images/productos/delineador-retractil.svg"));
         productoService.guardar(new Producto(
                 "Labial Cremoso Velvet Teddy", "Labial cremoso de acabado aterciopelado.",
-                109900, 0, 4, "MAC", "Labiales", "Velvet Teddy"));
+                109900, 0, 4, "MAC", "Labiales", "Velvet Teddy",
+                "/images/productos/labial-cremoso-velvet-teddy.svg"));
         productoService.guardar(new Producto(
                 "Mascara Volume Express", "Mascara para volumen extremo con cepillo curvo.",
-                38900, 0, 0, "L'Oreal", "Mascaras de pestanas", "Negro"));
+                38900, 0, 0, "L'Oreal", "Mascaras de pestanas", "Negro",
+                "/images/productos/mascara-volume-express.svg"));
         productoService.guardar(new Producto(
                 "Polvo Compacto Natural", "Polvo compacto que controla el brillo durante el dia.",
-                29900, 0, 20, "Vogue", "Polvos", "Natural"));
+                29900, 0, 20, "Vogue", "Polvos", "Natural",
+                "/images/productos/polvo-compacto-natural.svg"));
         productoService.guardar(new Producto(
                 "Labial Liquido Rosa", "Labial liquido de acabado mate y tono rosa romantico.",
-                37900, 42900, 16, "Yanbal", "Labiales", "Rosa Romantico"));
+                37900, 42900, 16, "Yanbal", "Labiales", "Rosa Romantico",
+                "/images/productos/labial-liquido-rosa.svg"));
     }
 
     private void sembrarPedidosDemo() {

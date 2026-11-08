@@ -1,6 +1,6 @@
 package com.misslumina.repository;
 
-import com.misslumina.model.Producto;
+import com.misslumina.model.catalog.Producto;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

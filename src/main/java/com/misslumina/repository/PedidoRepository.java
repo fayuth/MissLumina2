@@ -1,6 +1,6 @@
 package com.misslumina.repository;
 
-import com.misslumina.model.Pedido;
+import com.misslumina.model.ecommerce.Pedido;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

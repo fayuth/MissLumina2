@@ -1,14 +1,15 @@
 package com.misslumina.view.components;
 
 import com.misslumina.exception.MissLuminaException;
-import com.misslumina.model.Producto;
-import com.misslumina.service.CarritoService;
+import com.misslumina.model.catalog.Producto;
+import com.misslumina.service.ecommerce.CarritoService;
 import com.misslumina.util.FormatoUtil;
 import com.misslumina.view.util.UiUtils;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 
 public class ProductoCard extends Div {
@@ -19,6 +20,9 @@ public class ProductoCard extends Div {
         this.producto = producto;
         addClassName("product-card");
 
+        Image imagen = new Image(producto.getImagenUrlSegura(), producto.getNombre());
+        imagen.addClassName("product-image");
+
         Div cuerpo = new Div();
         cuerpo.addClassName("product-body");
 
@@ -26,6 +30,8 @@ public class ProductoCard extends Div {
         marca.addClassName("product-brand");
         Span nombre = new Span(producto.getNombre());
         nombre.addClassName("product-name");
+        Span descripcion = new Span(producto.getDescripcionCorta());
+        descripcion.addClassName("product-description");
         Span tono = new Span(producto.getTono() == null ? "" : "Tono: " + producto.getTono());
         tono.addClassName("product-tone");
 
@@ -63,8 +69,8 @@ public class ProductoCard extends Div {
         Div acciones = new Div(ver, agregar);
         acciones.addClassName("product-actions");
 
-        cuerpo.add(marca, nombre, tono, precios, stock, acciones);
-        add(cuerpo);
+        cuerpo.add(marca, nombre, descripcion, tono, precios, stock, acciones);
+        add(imagen, cuerpo);
     }
 
     public Producto getProducto() {

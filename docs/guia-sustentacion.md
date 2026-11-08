@@ -18,10 +18,10 @@ Miss Lumina es una tienda virtual de maquillaje desarrollada con:
 - Maven y Maven Wrapper.
 - API REST opcional para consultas.
 
-La aplicacion permite registrarse, iniciar sesion, consultar el catalogo,
-agregar productos al carrito, registrar pedidos con UUID unico, consultar el
-historial y administrar productos, inventario, pedidos, categorias, marcas,
-tonos y reportes.
+La aplicacion permite registrarse, iniciar sesion, consultar el catalogo con
+imagenes y descripciones, agregar productos al carrito, registrar pedidos con
+UUID unico, consultar el historial y administrar productos, inventario, pedidos,
+categorias, marcas, tonos y reportes.
 
 No se utiliza Swing ni SQLite.
 
@@ -71,7 +71,7 @@ servicio y toda persistencia pasa por un repositorio.
 | Clase | Responsabilidad |
 |---|---|
 | `Usuario` | Datos del cliente o administrador, rol, telefono y fecha de registro. |
-| `Producto` | Datos del maquillaje, precio, stock, marca, categoria, tono y calculos. |
+| `Producto` | Datos del maquillaje, descripcion, imagen, precio, stock, marca, categoria, tono y calculos. |
 | `Pedido` | Cabecera de la transaccion, UUID, fecha, estado, total y usuario. |
 | `DetallePedido` | Linea del pedido: producto, cantidad, precio unitario y subtotal. |
 
@@ -84,6 +84,23 @@ servicio y toda persistencia pasa por un repositorio.
 | `Categoria` | Tabla maestra de categorias. |
 | `Marca` | Tabla maestra de marcas. |
 | `Tono` | Tabla maestra de tonos. |
+
+### Imagenes y descripcion de producto
+
+Cada producto tiene una descripcion y una referencia interna de imagen en
+`productos.imagen_url`. Las imagenes de demostracion son SVG locales ubicados
+en `src/main/resources/META-INF/resources/images/productos/`. Si no hay imagen
+definida, se usa `producto-default.svg`.
+
+La descripcion se muestra en las tarjetas, en el catalogo y en el detalle del
+producto. El administrador puede editar la descripcion desde `/admin/productos`
+y subir una imagen con el selector de archivos o arrastrandola sobre el area de
+carga. No se escriben rutas manualmente.
+
+El archivo se valida en el servidor (PNG, JPG, WEBP o GIF, maximo 5 MB) y se
+guarda en `uploads/productos/`. La aplicacion lo publica desde
+`/uploads/productos/...`. La carpeta se crea automaticamente al iniciar y puede
+cambiarse con la variable `UPLOADS_DIR`.
 
 ---
 
@@ -120,7 +137,7 @@ public Producto() {
 
 public Producto(String nombre, String descripcion, double precio,
                 double precioAnterior, int stock, String marca,
-                String categoria, String tono) {
+                String categoria, String tono, String imagenUrl) {
     // asignacion y validacion
 }
 ```
@@ -153,7 +170,7 @@ public static final int MAX_UNIDADES_POR_PRODUCTO = 20;
 ### 4.6 Tipos de datos usados
 
 - Primitivos: `int`, `double`, `boolean`, `long`.
-- `String`: nombres, correos, descripciones, estados, marcas y tonos.
+- `String`: nombres, correos, descripciones, rutas de imagen, estados, marcas y tonos.
 - `LocalDate`: fecha del pedido y fecha de registro.
 - `LocalDateTime`: fecha y hora exacta del pedido.
 - `UUID`: identificador unico de la transaccion.
@@ -328,8 +345,8 @@ La interfaz es responsive mediante CSS propio en
 
 | Rol | Correo | Contrasena |
 |---|---|---|
-| Administrador | `admin@misslumina.com` | `Admin123*` |
-| Cliente | `cliente@misslumina.com` | `Cliente123*` |
+| Administrador | `fayuthr4@gmail.com` | `SingOfRegret@23` |
+| Cliente | `fayuthr1@gmail.com` | `SingOfRegret@23` |
 
 Las contrasenas se almacenan como hash SHA-256, no en texto plano.
 
@@ -497,7 +514,7 @@ dia. Se pueden filtrar por rango de fechas y tambien se exponen por API REST.
 
 - Pasarela de pago real.
 - Envio de correos de confirmacion.
-- Imagenes reales de producto (hoy las tarjetas solo muestran texto).
+- Redimensionado automatico de las imagenes subidas.
 - Recuperacion de contrasena.
 - Pruebas automatizadas con JUnit y Testcontainers.
 - Roles y permisos mas granulares.

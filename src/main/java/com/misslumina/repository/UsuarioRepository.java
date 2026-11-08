@@ -1,6 +1,6 @@
 package com.misslumina.repository;
 
-import com.misslumina.model.Usuario;
+import com.misslumina.model.core.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

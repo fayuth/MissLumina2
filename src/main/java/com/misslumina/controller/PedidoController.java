@@ -2,8 +2,8 @@ package com.misslumina.controller;
 
 import com.misslumina.controller.dto.PedidoDetalleDTO;
 import com.misslumina.controller.dto.PedidoResumenDTO;
-import com.misslumina.model.Pedido;
-import com.misslumina.service.PedidoService;
+import com.misslumina.model.ecommerce.Pedido;
+import com.misslumina.service.ecommerce.PedidoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

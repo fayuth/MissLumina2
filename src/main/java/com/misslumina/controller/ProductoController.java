@@ -1,7 +1,7 @@
 package com.misslumina.controller;
 
-import com.misslumina.model.Producto;
-import com.misslumina.service.ProductoService;
+import com.misslumina.model.catalog.Producto;
+import com.misslumina.service.catalog.ProductoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

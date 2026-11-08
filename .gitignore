@@ -26,3 +26,6 @@ Thumbs.db
 # Variables locales
 .env
 .env.local
+
+# Imagenes subidas por el administrador
+uploads/

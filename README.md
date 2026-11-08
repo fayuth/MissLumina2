@@ -7,11 +7,11 @@ Proyecto academico completo desarrollado con **Java 21**, **Spring Boot**, **Vaa
 ## 1. Funcionalidades
 
 ### Tienda
-- Portada con categorias y productos destacados.
+- Portada con categorias y productos destacados con imagen.
 - Registro de clientes con validacion y contrasena cifrada con SHA-256.
 - Inicio y cierre de sesion con estado guardado en la sesion Vaadin.
-- Catalogo con busqueda por texto, categoria, marca y tono.
-- Detalle de producto con precio, descuento, stock y selector de cantidad.
+- Catalogo con busqueda por texto, categoria, marca y tono, con miniatura y descripcion.
+- Detalle de producto con imagen, descripcion, precio, descuento, stock y selector de cantidad.
 - Carrito de compras en memoria por sesion.
 - Confirmacion de pedido con metodo de pago, subtotal, IVA del 19% y total.
 - Generacion de **UUID unico** y fecha/hora para cada transaccion.
@@ -66,7 +66,10 @@ MissLumina(Proyecto)
 │   └── view/                       Vistas Vaadin, layout y componentes
 ├── src/main/resources/
 │   ├── application.properties
-│   └── META-INF/resources/styles.css
+│   └── META-INF/resources/
+│       ├── styles.css
+│       └── images/productos/       Imagenes SVG de demostracion
+├── uploads/                        Imagenes subidas por el administrador (se crea sola)
 ├── pom.xml
 ├── mvnw
 └── mvnw.cmd
@@ -92,6 +95,7 @@ Relaciones:
 - Un pedido tiene muchos detalles.
 - Un producto aparece en muchos detalles.
 - `productos.categoria`, `productos.marca` y `productos.tono` son llaves foraneas hacia las tablas maestras por nombre, con `ON UPDATE CASCADE`.
+- `productos.imagen_url` guarda la referencia interna de la imagen del producto.
 - `pedidos.id_transaccion` es `UUID NOT NULL UNIQUE`.
 
 El script `database/miss_lumina_db.sql` incluye:
@@ -101,6 +105,21 @@ El script `database/miss_lumina_db.sql` incluye:
 - `ALTER TABLE` para llaves foraneas, checks e indices
 - `INSERT` de datos de demostracion
 - `SELECT`, `UPDATE` y `DELETE` de ejemplo
+
+### Imagenes de producto
+
+Las imagenes de demostracion son SVG locales y estan en
+`src/main/resources/META-INF/resources/images/productos/`. Se sirven en rutas como
+`/images/productos/labial-mate-luminoso.svg`.
+
+El administrador no escribe rutas. En `/admin/productos` puede pulsar
+**Seleccionar imagen** o arrastrar un archivo sobre el area de carga. Se aceptan imagenes
+PNG, JPG, WEBP o GIF de hasta 5 MB. El archivo se guarda automaticamente en
+`uploads/productos/` y la aplicacion lo publica desde `/uploads/productos/...`.
+
+La carpeta `uploads/` se crea al iniciar la aplicacion y se ignora en Git. Si se necesita
+otra ubicacion, se puede configurar la variable de entorno `UPLOADS_DIR`. Cuando un producto
+no tiene imagen, se usa `/images/productos/producto-default.svg`.
 
 ---
 
@@ -193,8 +212,8 @@ Si la base esta vacia, `DataInitializer` crea automaticamente los datos de demos
 
 | Rol | Correo | Contrasena |
 |---|---|---|
-| Administrador | `admin@misslumina.com` | `Admin123*` |
-| Cliente | `cliente@misslumina.com` | `Cliente123*` |
+| Administrador | `fayuthr4@gmail.com` | `SingOfRegret@23` |
+| Cliente | `fayuthr1@gmail.com` | `SingOfRegret@23` |
 
 Las contrasenas se guardan como hash SHA-256, no como texto plano.
 

@@ -1,7 +1,7 @@
 package com.misslumina.controller.dto;
 
-import com.misslumina.model.DetallePedido;
-import com.misslumina.model.Pedido;
+import com.misslumina.model.ecommerce.DetallePedido;
+import com.misslumina.model.ecommerce.Pedido;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

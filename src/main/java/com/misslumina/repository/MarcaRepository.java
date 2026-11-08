@@ -1,6 +1,6 @@
 package com.misslumina.repository;
 
-import com.misslumina.model.Marca;
+import com.misslumina.model.catalog.Marca;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
