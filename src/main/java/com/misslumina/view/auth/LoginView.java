@@ -1,6 +1,5 @@
 package com.misslumina.view.auth;
 
-import com.misslumina.exception.CredencialesInvalidasException;
 import com.misslumina.exception.MissLuminaException;
 import com.misslumina.model.core.Usuario;
 import com.misslumina.service.core.SesionService;
@@ -76,8 +75,6 @@ public class LoginView extends BaseView implements BeforeEnterObserver {
                 sesionService.iniciarSesion(usuario);
                 UiUtils.exito("Bienvenida, " + usuario.getNombreCorto() + ".");
                 UI.getCurrent().navigate("");
-            } catch (CredencialesInvalidasException ex) {
-                UiUtils.error(ex.getMessage());
             } catch (MissLuminaException ex) {
                 UiUtils.error(ex.getMessage());
             } catch (Exception ex) {
@@ -96,13 +93,7 @@ public class LoginView extends BaseView implements BeforeEnterObserver {
         FormLayout formulario = new FormLayout(correo, contrasena);
         formulario.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
 
-        Div demo = new Div();
-        demo.addClassName("demo-box");
-        demo.add(new Span("Cuentas de prueba:"),
-                new Span("Admin: fayuthr4@gmail.com / SingOfRegret@23"),
-                new Span("Cliente: fayuthr1@gmail.com / SingOfRegret@23"));
-
-        tarjeta.add(titulo, subtitulo, formulario, ingresar, registro, demo);
+        tarjeta.add(titulo, subtitulo, formulario, ingresar, registro);
         add(tarjeta);
     }
 }
