@@ -315,18 +315,6 @@ body {
     font-size: 0.9rem;
 }
 
-.demo-box {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    margin-top: 1rem;
-    padding: 0.6rem 0.75rem;
-    border: 1px solid var(--ml-line);
-    border-radius: var(--ml-radius);
-    color: var(--ml-muted);
-    font-size: 0.8rem;
-}
-
 .filter-bar {
     padding: 0.75rem;
     border: 1px solid var(--ml-line);

@@ -127,12 +127,6 @@ CREATE INDEX idx_pedidos_fecha ON pedidos (fecha_pedido);
 CREATE INDEX idx_detalle_pedido ON detalle_pedido (pedido_id);
 CREATE INDEX idx_detalle_producto ON detalle_pedido (producto_id);
 
-
-INSERT INTO usuarios (nombre, correo, contrasena, rol, telefono, fecha_registro) VALUES
-    ('Administradora Miss Lumina', 'fayuthr4@gmail.com',
-     'acf7790402d727d0202543933a7286d208f75788934902b278ed6ebfe55795a8',
-     'ADMINISTRADOR', '3005053089', CURRENT_DATE - INTERVAL '6 months'),
-
 SELECT p.id, p.nombre, p.descripcion, p.imagen_url, p.categoria, p.marca, p.tono, p.precio, p.stock,
        (p.stock * p.precio) AS valor_inventario
 FROM productos p
@@ -157,7 +151,7 @@ SELECT p.id_transaccion, pr.nombre AS producto, d.cantidad,
 FROM pedidos p
 JOIN detalle_pedido d ON d.pedido_id = p.id
 JOIN productos pr ON pr.id = d.producto_id
-WHERE p.id_transaccion = '11111111-1111-4111-8111-111111111111';
+ORDER BY p.id_transaccion, pr.nombre;
 
 SELECT COUNT(*) AS total_productos FROM productos;
 SELECT COUNT(*) AS total_pedidos FROM pedidos;
