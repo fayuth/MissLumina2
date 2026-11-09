@@ -60,6 +60,9 @@ public class GestionProductosView extends BaseView implements BeforeEnterObserve
             construido = true;
         }
         cargar();
+        if (event.getLocation().getQueryParameters().getSingleParameter("nuevo").isPresent()) {
+            event.getUI().beforeClientResponse(this, ctx -> abrirFormulario(null));
+        }
     }
 
     private void construir() {
@@ -115,6 +118,9 @@ public class GestionProductosView extends BaseView implements BeforeEnterObserve
         Button editar = new Button("Editar", e -> abrirFormulario(producto));
         editar.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SMALL);
 
+        Button reponer = new Button("+ Stock", e -> abrirReposicion(producto));
+        reponer.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SMALL);
+
         Button disponibilidad = new Button(producto.isDisponible() ? "Desactivar" : "Activar",
                 e -> cambiarDisponibilidad(producto));
         disponibilidad.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SMALL);
@@ -126,7 +132,7 @@ public class GestionProductosView extends BaseView implements BeforeEnterObserve
         eliminar.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_ERROR,
                 ButtonVariant.LUMO_SMALL);
 
-        HorizontalLayout acciones = new HorizontalLayout(editar, disponibilidad, eliminar);
+        HorizontalLayout acciones = new HorizontalLayout(editar, reponer, disponibilidad, eliminar);
         acciones.setSpacing(false);
         return acciones;
     }
@@ -236,6 +242,7 @@ public class GestionProductosView extends BaseView implements BeforeEnterObserve
         tono.setClearButtonVisible(true);
         tono.setWidthFull();
 
+        final int stockAnterior = existente == null ? 0 : existente.getStock();
         Checkbox disponible = new Checkbox("Disponible para la venta");
         disponible.setValue(existente == null || existente.isDisponible());
 
@@ -278,7 +285,9 @@ public class GestionProductosView extends BaseView implements BeforeEnterObserve
                 producto.setMarca(marca.getValue());
                 producto.setCategoria(categoria.getValue());
                 producto.setTono(tono.getValue());
-                producto.setDisponible(disponible.getValue());
+                boolean repuesto = existente != null && stockAnterior <= 0
+                        && producto.getStock() > 0;
+                producto.setDisponible(repuesto || disponible.getValue());
                 productoService.guardar(producto);
                 guardado[0] = true;
                 if (!imagenOriginal.equals(imagenUrl.get())) {
@@ -291,6 +300,43 @@ public class GestionProductosView extends BaseView implements BeforeEnterObserve
                 UiUtils.error(ex.getMessage());
             } catch (Exception ex) {
                 UiUtils.error("No fue posible guardar el producto.");
+            }
+        });
+        guardar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        dialog.getFooter().add(cancelar, guardar);
+        dialog.open();
+    }
+
+    private void abrirReposicion(Producto producto) {
+        Dialog dialog = new Dialog();
+        dialog.setHeaderTitle("Agregar unidades");
+        dialog.setWidth("380px");
+
+        Span nombre = new Span(producto.getNombre() + " (stock actual: "
+                + producto.getStock() + ")");
+        NumberField unidades = new NumberField("Unidades a agregar");
+        unidades.setMin(1);
+        unidades.setValue(10.0);
+        unidades.setStepButtonsVisible(true);
+        unidades.setWidthFull();
+        dialog.add(nombre, unidades);
+
+        Button cancelar = new Button("Cancelar", e -> dialog.close());
+        cancelar.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        Button guardar = new Button("Agregar", e -> {
+            try {
+                int cantidad = unidades.getValue() == null ? 0 : unidades.getValue().intValue();
+                if (cantidad <= 0) {
+                    UiUtils.error("Indique cuantas unidades desea agregar.");
+                    return;
+                }
+                int actual = productoService.buscarPorId(producto.getId()).getStock();
+                productoService.actualizarStock(producto.getId(), actual + cantidad);
+                dialog.close();
+                cargar();
+                UiUtils.exito("Se agregaron " + cantidad + " unidades a " + producto.getNombre() + ".");
+            } catch (MissLuminaException ex) {
+                UiUtils.error(ex.getMessage());
             }
         });
         guardar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

@@ -6,6 +6,7 @@ import com.misslumina.service.ecommerce.CarritoService;
 import com.misslumina.service.core.SesionService;
 import com.misslumina.util.FormatoUtil;
 import com.misslumina.view.BaseView;
+import com.misslumina.view.admin.AdminPanelView;
 import com.misslumina.view.auth.LoginView;
 import com.misslumina.view.util.UiUtils;
 import com.vaadin.flow.component.UI;
@@ -18,10 +19,12 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 
 @Route("carrito")
-public class CarritoView extends BaseView {
+public class CarritoView extends BaseView implements BeforeEnterObserver {
 
     private final CarritoService carritoService;
     private final SesionService sesionService;
@@ -30,6 +33,13 @@ public class CarritoView extends BaseView {
         this.carritoService = carritoService;
         this.sesionService = sesionService;
         construir();
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if (sesionService.esAdministrador()) {
+            event.forwardTo(AdminPanelView.class);
+        }
     }
 
     private void construir() {

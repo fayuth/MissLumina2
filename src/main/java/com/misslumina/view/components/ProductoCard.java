@@ -65,6 +65,7 @@ public class ProductoCard extends Div {
         });
         agregar.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
         agregar.setEnabled(producto.isDisponible() && producto.getStock() > 0);
+        agregar.setVisible(carritoService.puedeComprar());
 
         Div acciones = new Div(ver, agregar);
         acciones.addClassName("product-actions");

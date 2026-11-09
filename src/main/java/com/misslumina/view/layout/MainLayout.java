@@ -1,17 +1,21 @@
 package com.misslumina.view.layout;
 
 import com.misslumina.service.core.SesionService;
-import com.misslumina.view.publicc.InicioView;
 import com.misslumina.view.admin.*;
 import com.misslumina.view.auth.LoginView;
 import com.misslumina.view.auth.RegistroView;
 import com.misslumina.view.cliente.CarritoView;
 import com.misslumina.view.cliente.CatalogoView;
 import com.misslumina.view.cliente.HistorialPedidosView;
+import com.misslumina.view.cliente.PerfilView;
+import com.misslumina.view.publicc.InicioView;
 import com.misslumina.view.util.UiUtils;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Span;
@@ -27,10 +31,14 @@ import com.vaadin.flow.router.RouterLink;
 public class MainLayout extends AppLayout {
 
     private final SesionService sesionService;
-    private final Span usuarioSpan = new Span();
+    private final Avatar avatar = new Avatar();
+    private final ContextMenu menuPerfil = new ContextMenu(avatar);
     private final Span contadorCarrito = new Span("0");
     private final Button sesionBoton = new Button();
     private final VerticalLayout menu = new VerticalLayout();
+    private final RouterLink marca = new RouterLink("Miss Lumina", InicioView.class);
+    private final Button carritoBoton = new Button(new Icon(VaadinIcon.CART));
+    private boolean drawerInicial;
 
     public MainLayout(SesionService sesionService) {
         this.sesionService = sesionService;
@@ -41,7 +49,7 @@ public class MainLayout extends AppLayout {
         contadorCarrito.setId("cart-count");
         contadorCarrito.addClassName("cart-count");
 
-        addToNavbar(crearMarca(), crearEspaciador(), crearAcciones());
+        addToNavbar(new DrawerToggle(), crearMarca(), crearEspaciador(), crearAcciones());
         menu.setPadding(true);
         menu.setSpacing(false);
         menu.addClassName("main-menu");
@@ -49,7 +57,6 @@ public class MainLayout extends AppLayout {
     }
 
     private Component crearMarca() {
-        RouterLink marca = new RouterLink("Miss Lumina", InicioView.class);
         marca.addClassName("app-brand");
         return marca;
     }
@@ -61,26 +68,19 @@ public class MainLayout extends AppLayout {
     }
 
     private Component crearAcciones() {
-        usuarioSpan.addClassName("navbar-user");
+        avatar.addClassName("navbar-avatar");
+        menuPerfil.setOpenOnClick(true);
 
-        Button carrito = new Button(new Icon(VaadinIcon.CART), e ->
-                UI.getCurrent().navigate(CarritoView.class));
-        carrito.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        carrito.addClassName("cart-button");
-        carrito.getElement().appendChild(contadorCarrito.getElement());
+        carritoBoton.addClickListener(e -> UI.getCurrent().navigate(CarritoView.class));
+        carritoBoton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        carritoBoton.addClassName("cart-button");
+        carritoBoton.getElement().appendChild(contadorCarrito.getElement());
 
         sesionBoton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
-        sesionBoton.addClickListener(e -> {
-            if (sesionService.estaAutenticado()) {
-                sesionService.cerrarSesion();
-                UiUtils.info("Sesion cerrada. Hasta pronto.");
-                UI.getCurrent().getPage().setLocation("/");
-            } else {
-                UI.getCurrent().navigate(LoginView.class);
-            }
-        });
+        sesionBoton.setText("Ingresar");
+        sesionBoton.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
 
-        HorizontalLayout acciones = new HorizontalLayout(usuarioSpan, carrito, sesionBoton);
+        HorizontalLayout acciones = new HorizontalLayout(carritoBoton, avatar, sesionBoton);
         acciones.setAlignItems(FlexComponent.Alignment.CENTER);
         acciones.setSpacing(true);
         acciones.addClassName("navbar-actions");
@@ -95,31 +95,58 @@ public class MainLayout extends AppLayout {
 
     private void actualizarEstado() {
         boolean autenticado = sesionService.estaAutenticado();
-        usuarioSpan.setText(autenticado ? "Hola, " + sesionService.getNombreMostrado() : "");
-        sesionBoton.setText(autenticado ? "Salir" : "Ingresar");
+        boolean admin = sesionService.esAdministrador();
+        carritoBoton.setVisible(!admin);
+        marca.setRoute(admin ? AdminPanelView.class : InicioView.class);
+        if (admin && !drawerInicial) {
+            setDrawerOpened(true);
+            drawerInicial = true;
+        }
+        avatar.setVisible(autenticado);
+        sesionBoton.setVisible(!autenticado);
+        if (autenticado) {
+            avatar.setName(sesionService.getUsuarioActual().getNombre());
+            menuPerfil.removeAll();
+            menuPerfil.addItem("Hola, " + sesionService.getNombreMostrado()).setEnabled(false);
+            menuPerfil.addItem("Mi perfil", e -> UI.getCurrent().navigate(PerfilView.class));
+            menuPerfil.addItem("Cerrar sesion", e -> cerrarSesion());
+        }
         contadorCarrito.setText(String.valueOf(sesionService.getUnidadesCarrito()));
         reconstruirMenu();
     }
 
+    private void cerrarSesion() {
+        sesionService.cerrarSesion();
+        UiUtils.info("Sesion cerrada. Hasta pronto.");
+        UI.getCurrent().getPage().setLocation("/");
+    }
+
     private void reconstruirMenu() {
         menu.removeAll();
-        menu.add(enlace("Inicio", InicioView.class));
-        menu.add(enlace("Catalogo", CatalogoView.class));
-        menu.add(enlace("Carrito", CarritoView.class));
-
-        if (sesionService.estaAutenticado()) {
-            menu.add(enlace("Mis pedidos", HistorialPedidosView.class));
-        }
         if (sesionService.esAdministrador()) {
-            Span separador = new Span("ADMINISTRACION");
-            separador.addClassName("menu-section");
-            menu.add(separador);
+            Span seccion = new Span("ADMINISTRACION");
+            seccion.addClassName("menu-section");
+            menu.add(seccion);
             menu.add(enlace("Panel", AdminPanelView.class));
             menu.add(enlace("Productos", GestionProductosView.class));
             menu.add(enlace("Inventario", GestionInventarioView.class));
             menu.add(enlace("Pedidos", GestionPedidosView.class));
             menu.add(enlace("Categorias y marcas", GestionCategoriasMarcasView.class));
             menu.add(enlace("Reportes", ReportesView.class));
+            menu.add(enlace("Mi perfil", PerfilView.class));
+            Span tienda = new Span("TIENDA");
+            tienda.addClassName("menu-section");
+            menu.add(tienda);
+            menu.add(enlace("Ver catalogo", CatalogoView.class));
+            return;
+        }
+        menu.add(enlace("Inicio", InicioView.class));
+        menu.add(enlace("Catalogo", CatalogoView.class));
+        menu.add(enlace("Carrito", CarritoView.class));
+
+        if (sesionService.estaAutenticado()) {
+            menu.add(enlace("Mis pedidos", HistorialPedidosView.class));
+            menu.add(enlace("Mi perfil", PerfilView.class));
         }
         if (!sesionService.estaAutenticado()) {
             menu.add(enlace("Iniciar sesion", LoginView.class));

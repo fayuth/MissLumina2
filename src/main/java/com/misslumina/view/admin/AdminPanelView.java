@@ -4,10 +4,11 @@ import com.misslumina.model.ecommerce.Pedido;
 import com.misslumina.service.ecommerce.PedidoService;
 import com.misslumina.service.admin.ReporteService;
 import com.misslumina.service.core.SesionService;
-import com.misslumina.view.*;
+import com.misslumina.view.BaseView;
 import com.misslumina.view.components.EstadoBadge;
 import com.misslumina.view.components.StatCard;
 import com.misslumina.view.util.UiUtils;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -16,7 +17,9 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -80,30 +83,49 @@ public class AdminPanelView extends BaseView implements BeforeEnterObserver {
     private Div crearAccesos() {
         Div panel = new Div();
         panel.addClassName("ml-card");
-        H2 titulo = new H2("Accesos rapidos");
+        H2 titulo = new H2("Gestion de la tienda");
         titulo.addClassName("section-title");
 
-        Button productos = new Button("Gestionar productos", e ->
-                UI.getCurrent().navigate(GestionProductosView.class));
-        productos.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Button inventario = new Button("Inventario", e ->
-                UI.getCurrent().navigate(GestionInventarioView.class));
-        inventario.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        Button pedidos = new Button("Gestionar pedidos", e ->
-                UI.getCurrent().navigate(GestionPedidosView.class));
-        pedidos.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        Button catalogos = new Button("Categorias y marcas", e ->
-                UI.getCurrent().navigate(GestionCategoriasMarcasView.class));
-        catalogos.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        Button reportes = new Button("Ver reportes", e ->
-                UI.getCurrent().navigate(ReportesView.class));
-        reportes.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        Button nuevoProducto = new Button("Nuevo producto", new Icon(VaadinIcon.PLUS),
+                e -> UI.getCurrent().navigate("admin/productos?nuevo=true"));
+        nuevoProducto.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        HorizontalLayout acciones = new HorizontalLayout(productos, inventario, pedidos,
-                catalogos, reportes);
-        acciones.setWrap(true);
-        panel.add(titulo, acciones);
+        HorizontalLayout cabecera = new HorizontalLayout(titulo, nuevoProducto);
+        cabecera.setWidthFull();
+        cabecera.setAlignItems(FlexComponent.Alignment.CENTER);
+        cabecera.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
+        Div tiles = new Div(
+                tile("Productos", "Crear, editar, eliminar y agregar stock",
+                        VaadinIcon.SHOP, GestionProductosView.class),
+                tile("Inventario", "Existencias y productos por agotarse",
+                        VaadinIcon.PACKAGE, GestionInventarioView.class),
+                tile("Pedidos", "Revisar y cambiar el estado de los pedidos",
+                        VaadinIcon.CART, GestionPedidosView.class),
+                tile("Categorias y marcas", "Categorias, marcas y tonos",
+                        VaadinIcon.TAGS, GestionCategoriasMarcasView.class),
+                tile("Reportes", "Ventas por fechas y mas vendidos",
+                        VaadinIcon.CHART, ReportesView.class));
+        tiles.addClassName("admin-tiles");
+
+        panel.add(cabecera, tiles);
         return panel;
+    }
+
+    private Div tile(String titulo, String detalle, VaadinIcon icono,
+                     Class<? extends Component> destino) {
+        Div icon = new Div(new Icon(icono));
+        icon.addClassName("admin-tile-icon");
+        Span t = new Span(titulo);
+        t.addClassName("admin-tile-title");
+        Span d = new Span(detalle);
+        d.addClassName("admin-tile-text");
+        Div textos = new Div(t, d);
+        textos.addClassName("stat-texts");
+        Div tile = new Div(icon, textos);
+        tile.addClassName("admin-tile");
+        tile.addClickListener(e -> UI.getCurrent().navigate(destino));
+        return tile;
     }
 
     private Div crearUltimosPedidos() {

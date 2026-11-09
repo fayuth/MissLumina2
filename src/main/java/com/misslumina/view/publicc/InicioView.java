@@ -42,6 +42,8 @@ public class InicioView extends BaseView {
         this.sesionService = sesionService;
         setPadding(false);
         setSpacing(false);
+        removeClassName("ml-page");
+        addClassName("home-page");
         construir();
     }
 
@@ -59,6 +61,9 @@ public class InicioView extends BaseView {
         Div contenido = new Div();
         contenido.addClassName("hero-content");
 
+        Span eyebrow = new Span("Nueva coleccion");
+        eyebrow.addClassName("hero-eyebrow");
+
         H2 titulo = new H2("Tu maquillaje, tu luz.");
         titulo.addClassName("hero-title");
 
@@ -71,14 +76,16 @@ public class InicioView extends BaseView {
                 e -> UI.getCurrent().navigate(CatalogoView.class));
         catalogo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        Button registro = new Button("Crear mi cuenta",
-                e -> UI.getCurrent().navigate(RegistroView.class));
-
-        HorizontalLayout acciones = new HorizontalLayout(catalogo, registro);
+        HorizontalLayout acciones = new HorizontalLayout(catalogo);
+        if (!sesionService.estaAutenticado()) {
+            Button registro = new Button("Crear mi cuenta",
+                    e -> UI.getCurrent().navigate(RegistroView.class));
+            acciones.add(registro);
+        }
         acciones.setSpacing(true);
         acciones.addClassName("hero-actions");
 
-        contenido.add(titulo, texto, acciones);
+        contenido.add(eyebrow, titulo, texto, acciones);
         hero.add(contenido);
         return hero;
     }

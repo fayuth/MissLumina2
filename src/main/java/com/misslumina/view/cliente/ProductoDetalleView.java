@@ -6,6 +6,7 @@ import com.misslumina.service.ecommerce.CarritoService;
 import com.misslumina.service.catalog.ProductoService;
 import com.misslumina.util.FormatoUtil;
 import com.misslumina.view.BaseView;
+import com.misslumina.view.admin.GestionInventarioView;
 import com.misslumina.view.util.UiUtils;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -123,9 +124,16 @@ public class ProductoDetalleView extends BaseView implements BeforeEnterObserver
         HorizontalLayout compra = new HorizontalLayout(cantidad, agregar, irCarrito);
         compra.setAlignItems(com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.END);
         compra.setWrap(true);
+        compra.setVisible(carritoService.puedeComprar());
 
         Div informacion = new Div(marca, nombre, tono, descripcion, precios, stock, compra);
         informacion.addClassName("detail-info");
+        if (!carritoService.puedeComprar()) {
+            Button gestionar = new Button("Ajustar stock en inventario", e ->
+                    UI.getCurrent().navigate(GestionInventarioView.class));
+            gestionar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            informacion.add(gestionar);
+        }
 
         Div contenido = new Div(imagenContenedor, informacion);
         contenido.addClassName("detail-layout");
