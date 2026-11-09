@@ -18,7 +18,7 @@ public class SesionService {
     public void iniciarSesion(Usuario usuario) {
         VaadinSession session = VaadinSession.getCurrent();
         if (session == null) {
-            throw new IllegalStateException("No hay una sesion Vaadin activa.");
+            throw new IllegalStateException("No hay una sesion activa.");
         }
         session.setAttribute(ATRIBUTO_USUARIO, usuario);
         session.setAttribute(ATRIBUTO_CARRITO, new Carrito());
