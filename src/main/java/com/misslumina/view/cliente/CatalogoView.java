@@ -136,6 +136,7 @@ public class CatalogoView extends BaseView implements BeforeEnterObserver {
         });
         agregar.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
         agregar.setEnabled(producto.isDisponible() && producto.getStock() > 0);
+        agregar.setVisible(carritoService.puedeComprar());
 
         HorizontalLayout acciones = new HorizontalLayout(ver, agregar);
         acciones.setSpacing(false);

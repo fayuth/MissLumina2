@@ -27,7 +27,15 @@ public class CarritoService {
         return getCarrito().getItems();
     }
 
+    public boolean puedeComprar() {
+        return !sesionService.esAdministrador();
+    }
+
     public void agregar(Producto producto, int cantidad) {
+        if (!puedeComprar()) {
+            throw new DatosInvalidosException(
+                    "Las cuentas de administracion no realizan compras.");
+        }
         if (producto == null) {
             throw new DatosInvalidosException("Debe seleccionar un producto.");
         }
