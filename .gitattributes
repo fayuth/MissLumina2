@@ -1,0 +1,2 @@
+# Fuerza finales de linea LF en scripts de shell (necesario en Linux)
+*.sh text eol=lf
